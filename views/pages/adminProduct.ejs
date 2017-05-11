@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <%include ../partials/head %>
+</head>
+<body>
+  <title>Admin Product</title>
+  <%include ../partials/nav %>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-6 col-md-4">
+        <a href="/admin/product/create"><button class="btn btn-success btn-lg">Create New Product</button></a>
+      </div>
+    </div> <!--end of row-->
+    <br />
+    <div class="row">
+      <% for (var i = 0; i < productList.length; i++) { %>
+        <div class="col-sm-6 col-md-4">
+          <div class="thumbnail myProductOverviewItem">
+            <!-- product picture -->
+            <img src="<%=productList[i].productPhotos[0]%>" alt="name" >
+            <div class="caption">
+              <table class="table table-hover">
+                <tr>
+                  <td>Name: </td>
+                  <td><%=productList[i].name%></td>
+                </tr>
+                <tr>
+                  <td>Price: </td>
+                  <td><i class="fa fa-usd" aria-hidden="true"></i>&nbsp;<%=productList[i].price%></td>
+                </tr>
+                <tr>
+                  <td>Inventory: </td>
+                  <td><%=productList[i].inventory%></td>
+                </tr>
+              </table>
+              <p>
+                <a href="/admin/product/detail/<%=productList[i].id%>" class="btn btn-primary btn-block">Detail</a>
+                <a href="#" class="btn btn-danger btn-block" role="button">Delete</a>
+              </p>
+            </div>
+          </div>
+        </div>
+        <% } %>
+      <!-- [END] product list -->
+    </div> <!-- end of row -->
+  </div> <!-- end of container -->
+  <%include ../partials/footer%>
+</body>
+</html>

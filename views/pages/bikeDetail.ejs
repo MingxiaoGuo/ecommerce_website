@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <%include ../partials/head %>
+</head>
+<body>
+  <%include ../partials/nav %>
+  <div class="container">
+    <div class="row">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <div class="preview col-md-6">
+            <div class="preview-pic tab-content">
+              <div class="tab-pane active" id="pic-1"><img src="<%= product.productPhotos[0] %>" style="height:350px;"/></div>
+            </div>
+          </div>
+          <div class="details col-md-6">
+            <h3 class="product-title"><%= product.name%></h3>
+            <div class="rating">
+              <div class="stars">
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <i class="fa fa-star" aria-hidden="true"></i>
+                <i class="fa fa-star-o" aria-hidden="true"></i>
+              </div>
+              <span class="review-no">41 reviews</span>
+            </div>
+            <!-- description panel -->
+            <div class="product-description">
+              <h4>Spec:</h4>
+              <ul class="list-group">
+                <% for (var i = 0; i < product.description.length; i++) { %>
+                <li class="list-group-item"> <span><%= product.description[i] %></span></li>
+                <% } %>
+              </ul>
+            </div>
+            <div class="product-description">
+              <h4 class="price">current price: <span>$<%= product.price %></span></h4>
+            </div>
+            <br />
+
+            <div class="action">
+              <button class="btn btn-info btn-lg" type="button" id="btnDetailAddCart" tag="<%= product.id%>">add to cart</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <%include ../partials/footer%>
+  <script>
+    $(document).ready(function () {
+      $("#btnDetailAddCart").on("click", function () {
+        var prodcut_id = $(this).attr("tag");
+
+        var length = $(".navbar-right").children("li").length;
+        if (length == 2) { // no user sign in
+          showNotification("top", "center", "warning", "please sign in first");
+        } else {
+          var data = {
+            id : prodcut_id
+          }
+          $.post("/bikes/productDetail", data, function (res) {
+            if (res.done) {
+              showNotification("top", "center", "success", res.message);
+            } else {
+              showNotification("top", "center", "danger", res.message);
+            }
+          });
+        }
+      });
+
+
+      function showNotification(from, align, type, message){
+        $.notify({
+          message: message
+        },{
+          type: type,
+          timer: 4000,
+          placement: {
+            from: from,
+            align: align
+          }
+        });
+      }
+    });
+
+  </script>
+</body>
+</html>

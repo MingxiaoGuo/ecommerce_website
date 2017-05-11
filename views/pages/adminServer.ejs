@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <%include ../partials/head %>
+</head>
+<body>
+  <%include ../partials/nav %>
+  <title>Server</title>
+  <div class="container">
+    <br />
+    <div class="row">
+      <div class="col-lg-4 col-sm-6">
+        <div class="card">
+          <div class="content">
+            <div class="row">
+              <div class="col-xs-5">
+                <div class="icon-big icon-warning text-center">
+                  <i class="fa fa-database" aria-hidden="true"></i>
+                </div>
+              </div>
+              <div class="col-xs-7">
+                <div class="numbers">
+                  <p>Instances</p>
+                  <%= ec2List.length%>
+                </div>
+              </div>
+            </div>
+            <div class="footer">
+              <hr />
+              <div class="stats">
+                <i class="fa fa-refresh" aria-hidden="true"></i> &nbsp;Updated Just Now
+              </div>
+            </div>
+          </div>
+        </div> <!-- end of card -->
+      </div> <!-- end of block -->
+      <div class="col-lg-4 col-sm-6">
+        <div class="card">
+          <div class="content">
+            <div class="row">
+              <div class="col-xs-5">
+                <div class="icon-big icon-success text-center">
+                  <i class="fa fa-money" aria-hidden="true"></i>
+                </div>
+              </div>
+              <div class="col-xs-7">
+                <div class="numbers">
+                  <p>Cost</p>
+                  $ <%= ec2List.length * 0.89%> / day
+                </div>
+              </div>
+            </div>
+            <div class="footer">
+              <hr />
+              <div class="stats">
+                <i class="fa fa-calendar-o" aria-hidden="true"></i> &nbsp;Updated 1 day ago
+              </div>
+            </div>
+          </div>
+        </div> <!-- end of card -->
+      </div> <!-- end of block -->
+      <div class="col-lg-4 col-sm-6">
+        <div class="card">
+          <div class="content">
+            <div class="row">
+              <div class="col-xs-5">
+                <div class="icon-big icon-info text-center">
+                  <i class="fa fa-line-chart" aria-hidden="true"></i>
+                </div>
+              </div>
+              <div class="col-xs-7">
+                <div class="numbers">
+                  <p>Request</p>
+                  5000/h
+                </div>
+              </div>
+            </div>
+            <div class="footer">
+              <hr />
+              <div class="stats">
+                <i class="fa fa-clock-o" aria-hidden="true"></i> &nbsp;Updated 1 hour ago
+              </div>
+            </div>
+          </div>
+        </div> <!-- end of card -->
+      </div> <!-- end of block -->
+    </div> <!-- end of row -->
+    <br />
+    <br />
+    <!-- Overview of each section -->
+    <div class="row">
+      <div class="col-lg-7">
+        <div class="card">
+          <div class="header">
+            <h4 class="title">Instance List</h4>
+            <p class="category">
+              You have <%=ec2List.length%> running instance(s)
+            </p>
+          </div>
+
+          <div class="content">
+            <ul class="list-unstyled team-members">
+              <li>
+                <div class="row">
+                  <div class="col-xs-5">
+                    <span class="text-primary"><large>Instance ID</large></span>
+                  </div>
+                  <div class="col-xs-2">
+                    <span class="text-primary"><large>Region</large></span>
+                  </div>
+                  <div class="col-xs-3 text-right">
+                    <!-- <btn class="btn btn-sm btn-success btn-icon" id="btnInstanceDetail">Detail</btn> &nbsp;
+                    <btn class="btn btn-sm btn-danger btn-icon" id="btnStopInstance">Stop</btn> -->
+                  </div>
+                </div>
+              </li>
+              <% for (var i = 0; i < ec2List.length; i++) { %>
+              <li>
+                <div class="row">
+                  <div class="col-xs-5">
+                    <span class="text-primary"><large><%=ec2List[i]%></large></span>
+                  </div>
+                  <div class="col-xs-2">
+                    <span class="text-primary"><large>Oregon</large></span>
+                  </div>
+                  <div class="col-xs-5 text-right">
+                    <a href="/admin/server/detail/<%=ec2List[i]%>"><btn class="btn btn-sm btn-success btn-icon" id="btnInstanceDetail" tag="#12fadsd13iodusf">Detail</btn></a> &nbsp;
+                    <btn class="btn btn-sm btn-danger btn-icon" id="btnStopInstance" tag="<%=ec2List[i]%>">Stop</btn>
+                  </div>
+                </div>
+              </li>
+              <% } %>
+            </ul>
+          </div> <!-- end of content -->
+          <hr>
+          <div class="text-center">
+            <button class="btn btn-primary" style="margin-bottom:20px;" id="btnLaunchInstance">Launch Instance</button>
+          </div>
+        </div> <!-- end of card -->
+      </div> <!-- end of col -->
+        <!-- end of instance -->
+      <div class="col-lg-5">
+        <div class="card">
+          <div class="header">
+            <h4 class="title">Load Balancer</h4>
+          </div>
+          <div class="content">
+            <ul class="list-unstyled team-members">
+              <li>
+                <div class="row">
+                  <div class="col-xs-8">
+                    <span class="text-primary"><large>Metric</large></span>
+                  </div>
+                  <div class="col-xs-4">
+                    <span class="text-primary"><large>Count</large></span>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <div class="row">
+                  <div class="col-xs-8">
+                    <span class="text-primary"><large>Active Connection Count</large></span>
+                  </div>
+                  <div class="col-xs-4">
+                    <span class="text-primary"><large><%= ec2List.length%></large></span>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <div class="row">
+                  <div class="col-xs-8">
+                    <span class="text-primary"><large>Request Count</large></span>
+                  </div>
+                  <div class="col-xs-4">
+                    <span class="text-primary"><large>10000</large></span>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <div class="row">
+                  <div class="col-xs-8">
+                    <span class="text-primary"><large>HTTP Success Count</large></span>
+                  </div>
+                  <div class="col-xs-4">
+                    <span class="text-primary"><large>50000</large></span>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <div class="row">
+                  <div class="col-xs-8">
+                    <span class="text-primary"><large>Processed Bytes</large></span>
+                  </div>
+                  <div class="col-xs-4">
+                    <span class="text-primary"><large><%=  12000923 * ec2List.length%> </large></span>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div> <!-- end of content -->
+        </div> <!-- end of card -->
+      </div> <!-- end of col -->
+      <!-- end of lb -->
+      <br />
+      <br />
+      <div class="col-lg-5">
+        <div class="card">
+          <div class="header">
+            <h4 class="title">Auto Scaling</h4>
+          </div>
+          <div class="content">
+            <ul class="list-unstyled team-members">
+              <li>
+                <div class="row">
+                  <div class="col-xs-8">
+                    <span class="text-primary"><large>Metric</large></span>
+                  </div>
+                  <div class="col-xs-4">
+                    <span class="text-primary"><large>Count</large></span>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <div class="row">
+                  <div class="col-xs-8">
+                    <span class="text-primary"><large>Group Min Size</large></span>
+                  </div>
+                  <div class="col-xs-4">
+                    <span class="text-primary"><large>8</large></span>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <div class="row">
+                  <div class="col-xs-8">
+                    <span class="text-primary"><large>Group Max Size</large></span>
+                  </div>
+                  <div class="col-xs-4">
+                    <span class="text-primary"><large>6</large></span>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <div class="row">
+                  <div class="col-xs-8">
+                    <span class="text-primary"><large>Group Desired Capacity</large></span>
+                  </div>
+                  <div class="col-xs-4">
+                    <span class="text-primary"><large>4</large></span>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <div class="row">
+                  <div class="col-xs-8">
+                    <span class="text-primary"><large>Group InService Instances</large></span>
+                  </div>
+                  <div class="col-xs-4">
+                    <span class="text-primary"><large><%= ec2List.length / 2 %></large></span>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <div class="row">
+                  <div class="col-xs-8">
+                    <span class="text-primary"><large>Group GroupTotal Instances Average</large></span>
+                  </div>
+                  <div class="col-xs-4">
+                    <span class="text-primary"><large><%= ec2List.length / 2 %></large></span>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div> <!-- end of content -->
+        </div> <!-- end of card -->
+      </div> <!-- end of col -->
+      <!-- end of as -->
+    </div> <!-- end of row -->
+    <!-- elb & as -->
+
+    <div class="row">
+
+
+    </div>
+  </div>
+  <script>
+    $(document).ready(function () {
+      $("#btnLaunchInstance").on("click", function() {
+        $.post("/admin/server/launchInstance")
+      });
+    })
+  </script>
+  <%include ../partials/footer%>
+</body>
+</html>

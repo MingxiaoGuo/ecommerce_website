@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <%include ../partials/head %>
+</head>
+<body>
+  <%include ../partials/nav %>
+  <title>Server Detail</title>
+  <div class="col-lg-8 col-lg-offset-2">
+    <div class="content">
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="card">
+            <div class="content">
+              <h4>Activity <br></h4>
+              <hr />
+              <div id="chartActivity" class="ct-chart"></div>
+              <div class="footer">
+                <div class="chart-legend">
+                  <i class="fa fa-circle text-info"></i> HTTP GET
+                  <i class="fa fa-circle text-warning"></i> HTTP POST
+                </div>
+              </div>
+            </div>
+          </div> <!-- end of card -->
+        </div>
+        <div class="col-lg-6">
+          <div class="card">
+            <div class="content">
+              <h4>Requests<br /></h4>
+              <hr />
+              <div id="chartPreferences" class="ct-chart"></div>
+              <div class="footer">
+                <div class="chart-legend">
+                  <i class="fa fa-circle text-info"></i> GET
+                  <i class="fa fa-circle text-danger"></i> POST
+                  <i class="fa fa-circle text-warning"></i> DELETE
+                </div>
+              </div> <!-- end of footer -->
+            </div> <!-- end of content -->
+          </div> <!--end of card-->
+        </div>
+      </div> <!-- end of row -->
+    </div> <!-- end of content -->
+  </div>
+  <script>
+    $(document).ready(function(){
+      $.get("/admin/server/loadInstanceChart/someid", function(data){
+        func(data);
+      });
+
+      var func = function (data) {
+        var options = {
+            seriesBarDistance: 10,
+            axisX: {
+                showGrid: false
+            },
+            height: "245px"
+        };
+
+        var responsiveOptions = [
+          ['screen and (max-width: 640px)', {
+            seriesBarDistance: 5,
+            axisX: {
+              labelInterpolationFnc: function (value) {
+                return value[0];
+              }
+            }
+          }]
+        ];
+
+        Chartist.Line('#chartActivity', data, options, responsiveOptions);
+      }
+
+      Chartist.Pie('#chartPreferences', {
+        labels: ['62%','32%','6%'],
+        series: [62, 32, 6]
+      });
+
+
+    });
+  </script>
+  <%include ../partials/footer%>
+</body>
+</html>

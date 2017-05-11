@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <%include ../partials/head %>
+</head>
+<body>
+  <%include ../partials/nav %>
+  <div class="container">
+    <div class="row">
+      <div class="card col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
+        <div class="header">
+          <h4 class="title">Create Product</h4>
+        </div>
+        <hr />
+        <div class="content" id="divProductCreate">
+          <div class="form-horizontal col-sm-10 col-sm-offset-1"><!-- whole block -->
+            <!-- success block -->
+            <div id="successMessageBlock" class="hide">
+            </div>
+            <!-- alert block -->
+            <div id="alertMessageBlock" class="hide">
+            </div>
+            <!-- form group for name -->
+            <div class="form-group">
+              <label class="col-sm-3 control-label" for="name">Product Name:</label>
+              <div class="col-sm-9">
+                <input class="form-control" id="name" placeholder="Product Name">
+              </div>
+            </div>
+            <!-- form group for category -->
+            <div class="form-group">
+              <label class="col-sm-3 control-label" for="category">Category:</label>
+              <div class="col-sm-9">
+                <label class="radio-inline"><input type="radio" name="category" value="men">Men</label>
+                <label class="radio-inline"><input type="radio" name="category" value="women">Women</label>
+                <label class="radio-inline"><input type="radio" name="category" value="kids">Kids</label>
+              </div>
+            </div>
+            <!-- form group for price -->
+            <div class="form-group">
+              <label class="col-sm-3 control-label" for="price">Unit Price:</label>
+              <div class="col-sm-9">
+                <input class="form-control" id="price" placeholder="Unit Price" type="number">
+              </div>
+            </div>
+            <!-- form group for inventory -->
+            <div class="form-group">
+              <label class="col-sm-3 control-label" for="inventory">Inventory:</label>
+              <div class="col-sm-9">
+                <input class="form-control" id="inventory" placeholder="Inventory" type="number">
+              </div>
+            </div>
+            <!-- form group for photos -->
+            <div class="form-group">
+              <label class="col-sm-3 control-label" for="photos">Photos:</label>
+              <div class="col-sm-9">
+                <input class="form-control" id="photos" placeholder="Photo URL" type="text">
+              </div>
+            </div>
+            <!-- form group for desciption -->
+            <div class="form-group">
+              <label class="col-sm-3 control-label" for="desciption">Description:</label>
+              <div class="col-sm-9">
+                <textarea class="form-control" id="desciption" rows="5" placeholder="Description"></textarea>
+              </div>
+            </div>
+            <!-- button group -->
+            <div class="form-group" id="buttonGroupInCreateProduct" >
+              <div class="col-sm-offset-3 col-sm-4">
+                <button class="btn btn-success" id="btnCreateProduct">Create</button>
+              </div>
+              <div class="col-sm-4" style="text-align: center">
+                <button class="btn btn-default" id="btnCancelCreatingProduct">Cancel</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> <!--end of card-->
+    </div> <!--end of row-->
+  </div>
+  <%include ../partials/footer%>
+  <script>
+    $(document).ready(function () {
+
+      $("#show").on("click", function () {
+        showNotification("top", "center", "warning", "this is a message");
+      })
+
+      function showNotification(from, align, type, message){
+      	$.notify({ message: message },{
+          type: type,
+          timer: 5000,
+          placement: {
+            from: from,
+            align: align
+          }
+        });
+      }
+
+      function reset() {
+        $("#price").val("");
+        $("#name").val("");
+        $("#inventory").val("");
+        $("#desciption").val("");
+        $("#photos").val("");
+        $("input:checked").removeAttr("checked");
+      }
+
+      $("#btnCreateProduct").on("click", function () {
+        console.log($("input[name='category']:checked").val());
+        var newProduct = {
+          name: $("#name").val(),
+          category: $("input[name='category']:checked").val(),
+          price: $("#price").val(),
+          inventory: $("#inventory").val(),
+          productPhotos: $("#photos").val(),
+          description: $("#desciption").val()
+        }
+        // validate for inventory
+        if (newProduct.name == "" || newProduct.price == "" || newProduct.inventory == "" || newProduct.description == "") {
+          showNotification("top", "center", "warning", "Please fill in all blanks");
+          return;
+        }
+        if (!Number.isInteger(Number.parseFloat($("#inventory").val()))) {
+          showNotification("top", "center", "warning", "Inventory is not an integer");
+          return;
+        }
+        $.post("/admin/product/create", newProduct, function (result) {
+          if (!result.done) {
+            showNotification("top", "center", "danger", result.message);
+          } else {
+            showNotification("top", "center", "success", "Add product successfully!");
+            reset();
+          }
+        });
+      });
+
+      $("#btnCancelCreatingProduct").on("click", function () {
+        window.location.replace("/admin/product");
+      });
+    });
+  </script>
+</body>
+</html>

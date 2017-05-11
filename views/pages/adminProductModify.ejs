@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <%include ../partials/head %>
+</head>
+<body>
+  <%include ../partials/nav %>
+  <div class="container">
+    <div class="row">
+      <div class="card col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
+        <div class="header">
+          <h4 class="title">Modify Product</h4>
+        </div>
+        <hr />
+        <div class="form-horizontal col-sm-10 col-sm-offset-1"><!-- whole block -->
+          <!-- success block -->
+          <div id="successMessageBlock" class="alert alert-success dismissable hide">
+            <button type="button" aria-hidden="true" class="close">×</button>
+            <span id="successMessage"></span>
+          </div>
+          <!-- alert block -->
+          <div id="alertMessageBlock" class="hide">
+          </div>
+          <div id="idtag"></div>
+          <!-- form group for name -->
+          <div class="form-group">
+            <label class="col-sm-3 control-label" for="name">Product Name:</label>
+            <div class="col-sm-9">
+              <input class="form-control" id="name" placeholder="Product Name" value="<%=product.name%>">
+            </div>
+          </div>
+          <!-- form group for category -->
+          <div class="form-group">
+            <label class="col-sm-3 control-label" for="category">Category:</label>
+            <div class="col-sm-9">
+              <label class="radio-inline"><input type="radio" name="category" value="men" id="men">Men</label>
+              <label class="radio-inline"><input type="radio" name="category" value="women" id="women">Women</label>
+              <label class="radio-inline"><input type="radio" name="category" value="kids" id="kids">Kids</label>
+            </div>
+          </div>
+          <!-- form group for price -->
+          <div class="form-group">
+            <label class="col-sm-3 control-label" for="price">Unit Price:</label>
+            <div class="col-sm-9">
+              <input class="form-control" id="price" placeholder="Unit Price" type="number" value="<%=product.price%>">
+            </div>
+          </div>
+          <!-- form group for inventory -->
+          <div class="form-group">
+            <label class="col-sm-3 control-label" for="inventory">Inventory:</label>
+            <div class="col-sm-9">
+              <input class="form-control" id="inventory" placeholder="Inventory" type="number" value="<%=product.inventory%>">
+            </div>
+          </div>
+          <!-- form group for photos -->
+          <div class="form-group">
+            <label class="col-sm-3 control-label" for="photos">Photos:</label>
+            <div class="col-sm-9">
+              <input class="form-control" id="photos" placeholder="Photos" type="test" value="<%=product.productPhotos[0]%>">
+            </div>
+          </div>
+          <!-- form group for desciption -->
+          <div class="form-group">
+            <label class="col-sm-3 control-label" for="desciption">Description:</label>
+            <div class="col-sm-9">
+              <textarea class="form-control" id="desciption" rows="5" placeholder="Description"><%=product.description%></textarea>
+            </div>
+          </div>
+          <!-- button group -->
+          <div class="form-group" id="buttonGroupInCreateProduct" >
+            <div class="col-sm-offset-3 col-sm-4">
+              <button class="btn btn-success" id="btnSaveProduct">Save Change</button>
+            </div>
+            <div class="col-sm-4" style="text-align: center">
+              <button class="btn btn-default" id="btnCancelSavingProduct">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <%include ../partials/footer%>
+  <script>
+    $(document).ready(function () {
+      // load category when DOM ready
+      if ("<%= product.category%>" == "men") {
+        $("#men").attr("checked", "checked");
+      } else if ("<%= product.category%>" == "women") {
+        $("#women").attr("checked", "checked");
+      } else {
+        $("#kids").attr("checked", "checked");
+      }
+
+      function showNotification(from, align, type, message){
+      	$.notify({
+        	message: message
+        },{
+          type: type,
+          timer: 3000,
+          placement: {
+            from: from,
+            align: align
+          }
+        });
+      }
+
+      $("#btnSaveProduct").on("click", function () {
+        console.log($("input[name='category']:checked").val());
+        var newProduct = {
+          name: $("#name").val(),
+          category: $("input[name='category']:checked").val(),
+          price: $("#price").val(),
+          inventory: $("#inventory").val(),
+          productPhotos: $("#photos").val(),
+          description: $("#desciption").val()
+        };
+        // validate for inventory
+        if (newProduct.name == "" || newProduct.price == "" || newProduct.inventory == "" || newProduct.description == "") {
+          showNotification("top", "center", "warning", "Please fill all blank");
+          return;
+        }
+        if (!Number.isInteger(Number.parseFloat($("#inventory").val()))) {
+          showNotification("top", "center", "warning", "Inventory is not an integer");
+          return;
+        }
+        // send POST request to controller
+        $.post("/admin/product/modify", newProduct, function (result) {
+          if (result.done) {
+            showNotification("top", "center", "success", result.message);
+            
+          } else {
+            showNotification("top", "center", "danger", result.message);
+          }
+        });
+      });
+
+      $("#btnCancelSavingProduct").on("click", function () {
+        window.location.replace("/admin/product");
+      });
+    });
+  </script>
+
+</body>
+</html>

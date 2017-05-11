@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%include ../partials/head %>
+  </head>
+  <body>
+    <%include ../partials/nav %>
+    <div class="col-md-4 col-md-offset-4">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+            Admin Sign In
+        </div>
+        <div class="panel-body">
+          <!-- [START] Login Form -->
+          <form action="/admin/login" method="post">
+            <div class="form-group">
+              <label for="inputEmail">Email</label>
+              <input type="email" class="form-control" name = "email" id="inputEmail" placeholder="Email" required>
+            </div>
+              <div class="form-group">
+                <label for="inputPassword">Password</label>
+                <input type="password" class="form-control" name = "password" id="inputPassword" placeholder="Password" required>
+              </div>
+              <button type="button" class="btn btn-primary" id="btnSubmit">Sign In</button>
+          </form>
+          <!-- [END] Login Form -->
+        </div>
+      </div>
+    </div>
+    <%include ../partials/footer%>
+    <script>
+      $(document).ready(function () {
+        $("#btnSubmit").on("click", function () {
+          var data = {
+            email : $("#inputEmail").val(),
+            password : $("#inputPassword").val()
+          };
+
+          $.post("/admin/login", data, function (result) {
+            if (result.done) {
+              showNotification("top", "center", "success", "logged in!")
+              setTimeout(function () {
+                window.location = "/admin";
+              }, 1500);
+            }
+          })
+        });
+
+
+        function showNotification(from, align, type, message){
+          $.notify({
+            message: message
+          },{
+            type: type,
+            timer: 2000,
+            placement: {
+              from: from,
+              align: align
+            }
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

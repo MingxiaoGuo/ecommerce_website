@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <%include ../partials/head %>
+</head>
+<body>
+  <%include ../partials/nav %>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-4 col-lg-offset-4 col-md-4 col-md-offset-4">
+        <div class="panel panel-default">
+          <div class="panel-heading">Register</div>
+          <div class="panel-body">
+            <form id="myForm">
+              <div class="form-group">
+                <label for="inputEmail">Email</label>
+                <input type="email" class="form-control" id="inputEmail" name = "email" placeholder="Email">
+              </div>
+              <div class="form-group">
+                <label for="inputPassword">Password</label>
+                <input type="password" class="form-control" id="inputPassword" name = "password" placeholder="Password">
+              </div>
+              <button type="button" class="btn btn-primary" id="btnSubmit">Register</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <%include ../partials/footer%>
+  <script>
+  $(document).ready(function () {
+    $("#btnSubmit").on("click", function() {
+      var data = {
+        email: $("#inputEmail").val(),
+        password: $("#inputPassword").val(),
+        type: "local"
+      }
+      $.post("/register", data, function (result) {
+        if (result.done) {
+          console.log("done");
+          showNotification("top", "center", "success", "register done");
+        } else {
+          showNotification("top", "center", "warning", result.message);
+        }
+      })
+    })
+    
+    function showNotification(from, align, type, message){
+      $.notify({
+        message: message
+      },{
+        type: type,
+        timer: 3000,
+        placement: {
+          from: from,
+          align: align
+        }
+      });
+    }
+  })
+
+  </script>
+</body>
+</html>
