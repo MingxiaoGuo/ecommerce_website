@@ -1,0 +1,52 @@
+<html>
+  <head>
+    <% include ../partials/head %>
+  </head>
+  <body>
+    <% include ../partials/nav%>
+    <div class="container">
+      <div class="row">
+        <div class="card col-md-8 col-md-offset-2">
+          <div class="header">
+              <h4 class="title">My Cart</h4>
+          </div>
+          <div class="content">
+            <ul class="list-unstyled team-members">
+              <% for (var i = 0; i < productList.length; i++) { %>
+              <li>
+                <div class="row">
+                  <div class="col-xs-1">
+                    <div class="avatar">
+                      <img src="<%= productList[i].productPhotos[0] %>" alt="Circle Image" class="img-circle img-no-padding img-responsive">
+                    </div>
+                  </div>
+                  <div class="col-xs-3">
+                    <span> Bike's name </span> <span><%= productList[i].name%></span>
+                  </div>
+                  <div class="col-xs-3">
+                    <span> Quantity: </span>
+                    <input type="number" value="1"/>
+                  </div>
+                  <div class="col-xs-3">
+                    <span> Price: </span><span><%= productList[i].price %></span>
+                  </div>
+                  <div class="col-xs-2">
+                    <btn class="btn btn-sm btn-danger btn-icon" id="btnDelete" tag="<%= productList[i]._id%>"><i class="fa fa-times" aria-hidden="true"></i></btn>
+                  </div>
+                </div>
+              </li>
+              <% } %>
+            </ul>
+          </div> <!-- end content -->
+          <hr />
+          <div class="footer">
+            <div class="">
+              <button class="btn btn-primary" style="margin:10px; margin-top:-10px;">Check out</button>
+            </div>
+          </div>
+        </div> <!--end card-->
+      </div> <!-- end row -->
+    </div> <!--end container-->
+    <% include ../partials/footer%>
+  </body>
+</html>

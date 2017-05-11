@@ -50,6 +50,41 @@ module.exports = function () {
 		});
   })
 
+  router.get("/launch", function (req, res) {
+    console.log("in launch");
+    var options = {
+  	  hostname: server.host,
+  	  port: server.port,
+  	  path: '/createec2',
+  	  method: 'POST',
+  	  headers: {
+  	    'Content-Type': 'application/json'
+  	  }
+  	};
+  	var request = http.request(options, function(response) {
+  	  response.setEncoding('utf8');
+  	  var result = '';
+  	  response.on('data', function(chunk)  {
+  	    result += chunk;
+  	  });
+  	  response.on('end', () => {
+
+        console.log("new instance id ", parsed);
+  	  	if (parsed != null) {
+          console.log("good");
+  	  		res.json({done: true})
+  	  	} else {
+  	  		res.json({done: false, message: "instance create failure!"});
+  	  	}
+  	  })
+  	});
+  	request.on('error', function(e)  {
+  	  console.log(`problem with request: ${e.message}`);
+  	});
+  	request.write();
+  	request.end();
+  })
+
   router.get("/server", function (req, res) {
     console.log("in server");
     if (req.session.user == undefined || req.session.user.type != "admin") {
@@ -299,7 +334,7 @@ module.exports = function () {
           console.log("before parse", user);
           var parsed = JSON.parse(user)[0];
           console.log("after parse", parsed);
-          res.render("pages/demo", {user : req.session.user, userProfile : parsed});
+          res.render("pages/adminUserDetail", {user : req.session.user, currentUser : parsed});
   			});
   			response.on('error', function (err) {
           console.log("in response error")
@@ -359,4 +394,9 @@ var getOverallInfoAsync = function (data, req, res) {
 
     res.render('pages/adminServer', {user: req.session.user,  ec2List : ec2List, elbstats : elbstatsOrginal, targetGroupList : targetGroupList });
   });
+}
+
+var getAllInstanceData = function (data, req, res) {
+  var partialPath = "http://" + server.host + ":" + server.port + "/";
+  // var path = partialPath + 
 }

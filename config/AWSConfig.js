@@ -11,7 +11,8 @@ var getAWSConfig = function (callback) {
   http.get({
     host: host,
     port: port,
-    path: '/db/aws'}, function(response) {
+    path: '/db/aws'
+  }, function(response) {
     var body = '';
     response.on('data', function(d) {
       body += d;

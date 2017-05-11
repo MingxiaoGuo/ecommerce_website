@@ -28,10 +28,10 @@ module.exports = function () {
 				user += data;
 			});
 			response.on('end', function () {
-				// var parsed = JSON.parse(user);
+				 var parsed = JSON.parse(user)[0];
 
-				console.log( user == "")
-        if (user == "") {
+				console.log( "in register", parsed);
+        if (parsed == null) {
           // 2. save user
           console.log("no duplicate email")
           return saveUser(temp, res);
@@ -84,6 +84,8 @@ module.exports = function () {
   	  	//var parsed = JSON.parse(result);
         console.log(result);
   	  	if (result) {
+          // add cart
+          addCart(result);
   	  		return res.json({done: true})
   	  	} else {
   	  		return res.json({done: false, message: "register fail!"});
@@ -94,6 +96,44 @@ module.exports = function () {
   	  console.log(`problem with request: ${e.message}`);
   	});
   	request.write(JSON.stringify(user));
+  	request.end();
+  };
+
+  function addCart(userId) {
+    var cart = {
+      userId : userId,
+      product : []
+    }
+    var options = {
+  	  hostname: server.host,
+  	  port: server.port,
+  	  path: '/db/cart/save',
+  	  method: 'POST',
+  	  headers: {
+  	    'Content-Type': 'application/json'
+  	  }
+  	};
+  	var request = http.request(options, function(response) {
+  	  response.setEncoding('utf8');
+  	  var result = '';
+  	  response.on('data', function(chunk)  {
+  	    result += chunk;
+  	  });
+  	  response.on('end', () => {
+  	  	//var parsed = JSON.parse(result);
+        console.log(result);
+  	  	if (result) {
+          // add cart
+          console.log("success add cart to ", userId);
+  	  	} else {
+  	  		console.log("cannot add cart to ", userId);
+  	  	}
+  	  })
+  	});
+  	request.on('error', function(e)  {
+  	  console.log(`problem with request: ${e.message}`);
+  	});
+  	request.write(JSON.stringify(cart));
   	request.end();
   }
 

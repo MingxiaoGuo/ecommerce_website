@@ -61,7 +61,7 @@
           var data = {
             id : prodcut_id
           }
-          $.post("/bikes/productDetail", data, function (res) {
+          $.post("/bike/addToCart", data, function (res) {
             if (res.done) {
               showNotification("top", "center", "success", res.message);
             } else {

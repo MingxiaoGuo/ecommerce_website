@@ -35,6 +35,7 @@ var register = require("./routes/register")();
 var login = require("./routes/login")();
 var userProfile = require("./routes/userProfile")();
 var bike = require("./routes/bike")();
+var cart = require("./routes/cart")();
 
 app.use('/', index);
 app.use("/admin", admin);
@@ -43,6 +44,7 @@ app.use("/register", register);
 app.use("/login", login);
 app.use("/userProfile", userProfile);
 app.use("/bike", bike);
+app.use("/cart", cart);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
