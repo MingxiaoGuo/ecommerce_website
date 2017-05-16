@@ -48,45 +48,9 @@ module.exports = function () {
         throw err;
 			});
 		});
-  });
-
-  router.post("/server/stopInstance", function (req, res) {
-    var id = req.body.id;
-    console.log(req.body);
-    console.log(id);
-    var options = {
-      hostname: server.host,
-      port: server.port,
-      path: '/stopec2instance?id=' + id,
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    };
-    var request = http.request(options, function(response) {
-      response.setEncoding('utf8');
-      var result = '';
-      response.on('data', function(chunk)  {
-        result += chunk;
-      });
-      response.on('end', () => {
-
-        if (result != null) {
-          console.log("good");
-          return res.json({done: true, message: "instance stopped"})
-        } else {
-          return res.json({done: false, message: "instance stopp failure!"});
-        }
-      })
-    });
-    request.on('error', function(e)  {
-      console.log(`problem with request: ${e.message}`);
-    });
-    request.write(JSON.stringify({test : "test"}));
-    request.end();
   })
 
-  router.post("/server/launch", function (req, res) {
+  router.get("/launch", function (req, res) {
     console.log("in launch");
     var options = {
   	  hostname: server.host,
@@ -104,19 +68,20 @@ module.exports = function () {
   	    result += chunk;
   	  });
   	  response.on('end', () => {
-        console.log("new instance id ", result);
-  	  	if (result != null) {
+
+        console.log("new instance id ", parsed);
+  	  	if (parsed != null) {
           console.log("good");
-  	  		return res.json({done: true, message: "instance create success"})
+  	  		res.json({done: true})
   	  	} else {
-  	  		return res.json({done: false, message: "instance create failure!"});
+  	  		res.json({done: false, message: "instance create failure!"});
   	  	}
   	  })
   	});
   	request.on('error', function(e)  {
   	  console.log(`problem with request: ${e.message}`);
   	});
-  	request.write(JSON.stringify({test : "test"}));
+  	request.write();
   	request.end();
   })
 
@@ -155,20 +120,14 @@ module.exports = function () {
       var data = {
         labels: ['05/01', '05/02', '05/03', '05/04', '05/05', '05/06', '05/07', '05/08', '05/09', '05/10'],
         series: [
-          [getRandomInt(400, 500), getRandomInt(400, 500), getRandomInt(400, 500), getRandomInt(400, 500), getRandomInt(400, 500), getRandomInt(400, 500), getRandomInt(400, 500), getRandomInt(400, 500), getRandomInt(400, 500), getRandomInt(400, 500)],
-          [getRandomInt(100, 200), getRandomInt(100, 200), getRandomInt(100, 200), getRandomInt(100, 200), getRandomInt(100, 200), getRandomInt(100, 200), getRandomInt(100, 200), getRandomInt(100, 200), getRandomInt(100, 200), getRandomInt(100, 200)]
+          [542, 543, 520, 680, 653, 753, 326, 434, 568, 610],
+          [230, 293, 380, 480, 503, 553, 600, 664, 698, 710]
         ]
       };
       console.log(data);
       res.json(data);
     }
-  });
-
-  function getRandomInt(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min)) + min;
-  }
+  })
 
   // --- product ---
   router.get("/product", function(req, res) {
@@ -219,8 +178,7 @@ module.exports = function () {
         req.body.productPhotos
       ],
       description: req.body.description
-    };
-    console.log(product);
+    }
     var options = {
   	  hostname: server.host,
   	  port: server.port,
@@ -440,5 +398,5 @@ var getOverallInfoAsync = function (data, req, res) {
 
 var getAllInstanceData = function (data, req, res) {
   var partialPath = "http://" + server.host + ":" + server.port + "/";
-  // var path = partialPath +
+  // var path = partialPath + 
 }

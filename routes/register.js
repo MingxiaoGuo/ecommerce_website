@@ -65,7 +65,6 @@ module.exports = function () {
         phoneNumber : " "
       }
     }
-    console.log(data);
     var options = {
   	  hostname: server.host,
   	  port: server.port,
