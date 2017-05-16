@@ -32,9 +32,8 @@
               <div id="chartPreferences" class="ct-chart"></div>
               <div class="footer">
                 <div class="chart-legend">
-                  <i class="fa fa-circle text-info"></i> GET
-                  <i class="fa fa-circle text-danger"></i> POST
-                  <i class="fa fa-circle text-warning"></i> DELETE
+                  <i class="fa fa-circle text-warning"></i> GET
+                  <i class="fa fa-circle text-info"></i> POST
                 </div>
               </div> <!-- end of footer -->
             </div> <!-- end of content -->
@@ -72,13 +71,23 @@
         Chartist.Line('#chartActivity', data, options, responsiveOptions);
       }
 
+      // var get = getRandomInt(60, 65);
+      // var post = getRandomInt(30, 35);
+      // var delete = 100 - get - post;
+
       Chartist.Pie('#chartPreferences', {
-        labels: ['62%','32%','6%'],
-        series: [62, 32, 6]
+        //labels: [get + "%", post + "%", delete + "%"],
+        series: [getRandomInt(60, 65),getRandomInt(30, 35)]
       });
 
 
     });
+
+    function getRandomInt(min, max) {
+      min = Math.ceil(min);
+      max = Math.floor(max);
+      return Math.floor(Math.random() * (max - min)) + min;
+    }
   </script>
   <%include ../partials/footer%>
 </body>
